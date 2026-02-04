@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Situación Ética</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            max-width: 100%;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #003953;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.9em;
+            line-height: 1.3;
+        }
+        .image-container {
+            width: 100%;
+            max-width: 800px;
+            height: 300px;
+            margin: 20px auto 25px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .scenario-text {
+            color: #003953;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            text-align: left;
+            padding: 0 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #003953;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .option {
+            background: #fafafa;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 18px 20px;
+            text-align: left;
+            font-size: 1.05em;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: flex-start;
+        }
+        .option:hover:not(.selected) {
+            background: #f0f0f0;
+            border-color: #003953;
+            transform: translateX(5px);
+        }
+        .option.selected {
+            background: #e3f2fd;
+            border-color: #003953;
+            font-weight: 600;
+        }
+        .letter {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: #003953;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 15px;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 14px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .btn-blue {
+            background: #003953;
+            color: white;
+        }
+        .btn-blue:hover {
+            background: #002a40;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 57, 83, 0.3);
+        }
+        .btn-yellow {
+            background: #EEDF0E;
+            color: #003953;
+            border: 2px solid #003953;
+        }
+        .btn-yellow:hover {
+            background: #e5d500;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(238, 223, 14, 0.3);
+        }
+        .btn-red {
+            background: #f44336;
+            color: white;
+            border: 2px solid #da190b;
+        }
+        .btn-red:hover {
+            background: #da190b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(244, 67, 54, 0.3);
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        .feedback-box {
+            padding: 30px;
+            border-radius: 18px;
+            margin-top: 20px;
+            animation: fadeIn 0.5s;
+            text-align: left;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .incorrect-box {
+            background: #ffebee;
+            color: #f44336;
+            border: 3px solid #f44336;
+        }
+        .minimum-correct-box {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 3px solid #4CAF50;
+        }
+        .best-practice-box {
+            background: #EEDF0E;
+            color: #003953;
+            border: 3px solid #003953;
+        }
+        .feedback-title {
+            font-size: 2.0em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .feedback-text {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .highlight {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: 700;
+        }
+        
+        /* Modal para opción b */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            max-width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .modal-title {
+            color: #003953;
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .modal-text {
+            color: #333;
+            font-size: 1.15em;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        .modal-btn {
+            background: #003953;
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .modal-btn:hover {
+            background: #002a40;
+            transform: translateY(-2px);
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8em;
+            cursor: pointer;
+            color: #777;
+            transition: color 0.3s;
+        }
+        .close-modal:hover {
+            color: #003953;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+            h1 {
+                font-size: 1.6em;
+            }
+            .image-container {
+                height: 220px;
+            }
+            .scenario-text {
+                font-size: 1.1em;
+                padding: 15px;
+            }
+            .option {
+                padding: 15px;
+                font-size: 0.95em;
+            }
+            .letter {
+                width: 24px;
+                height: 24px;
+                line-height: 24px;
+                font-size: 0.9em;
+            }
+            .btn {
+                padding: 12px 30px;
+                font-size: 0.95em;
+                width: 100%;
+                max-width: 280px;
+            }
+            .buttons {
+                flex-direction: column;
+            }
+            .feedback-title {
+                font-size: 1.7em;
+            }
+            .modal-content {
+                padding: 25px 20px;
+            }
+            .modal-title {
+                font-size: 1.6em;
+            }
+            .modal-text {
+                font-size: 1.05em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Página principal: Situación -->
+        <div class="page active" id="scenario-page">
+            <h1>Situación Ética</h1>
+            
+            <!-- IMAGEN: imagencaso.png desde la carpeta imagen -->
+            <div class="image-container">
+                <img src="imagen/imagencaso.png" alt="Situación ética en oficina">
+            </div>
+            
+            <div class="scenario-text">
+                Estás en una entidad pública y un compañero te pide que le dejes imprimir unos afiches de un candidato en la impresora de la oficina y compartirlos en el chat del trabajo. Nadie se da cuenta. ¿Qué haces?
+            </div>
+            
+            <div class="options">
+                <div class="option" onclick="selectOption('a')">
+                    <span class="letter">a</span>
+                    Acepto y ayudo
+                </div>
+                <div class="option" onclick="selectOption('b')">
+                    <span class="letter">b</span>
+                    Digo que no y explico por qué
+                </div>
+                <div class="option" onclick="selectOption('c')">
+                    <span class="letter">c</span>
+                    No acepto y reporto por el canal correspondiente
+                </div>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-blue" id="submit-btn" onclick="submitAnswer()" disabled>Responder</button>
+            </div>
+        </div>
+
+        <!-- Página: Respuesta Incorrecta (a) -->
+        <div class="page" id="incorrect-page">
+            <div class="feedback-box incorrect-box">
+                <div class="feedback-title">Incorrecto</div>
+                <div class="feedback-text">
+                    Esta acción constituye una <span class="highlight">conducta prohibida</span>: usar recursos públicos (impresora) y tiempo laboral con fines proselitistas.<br><br>
+                    Las consecuencias pueden incluir sanciones disciplinarias para ti y tu compañero, además de afectar la transparencia electoral.
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn btn-yellow" onclick="window.location.href='https://muysimple003-gif.github.io/E3/'">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- Página: Respuesta Mínima Correcta (b) -->
+        <div class="page" id="minimum-correct-page">
+            <div class="feedback-box minimum-correct-box">
+                <div class="feedback-title">Respuesta Mínima Correcta</div>
+                <div class="feedback-text">
+                    ✅ Evitaste una conducta prohibida al negarte a usar recursos públicos con fines proselitistas.<br><br>
+                    ⚠️ Sin embargo, en situaciones como esta es fundamental <span class="highlight">reportar el hecho</span> para proteger la transparencia institucional y la "paz electoral".
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn btn-yellow" onclick="window.location.href='https://muysimple003-gif.github.io/E3/'">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- Página: Mejor Práctica (c) -->
+        <div class="page" id="best-practice-page">
+            <div class="feedback-box best-practice-box">
+                <div class="feedback-title">¡Excelente!</div>
+                <div class="feedback-text">
+                    Has aplicado la <span class="highlight">mejor práctica ética</span>:<br><br>
+                    ✅ Rechazaste el uso indebido de recursos públicos<br>
+                    ✅ Reportaste la situación por el canal correspondiente<br><br>
+                    Esta acción protege la transparencia institucional, la imparcialidad del servicio público y contribuye a la "paz electoral".
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn btn-yellow" onclick="window.location.href='https://muysimple003-gif.github.io/E3/'">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para opción b -->
+    <div class="modal" id="modal-b">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div class="modal-title">Respuesta Mínima Correcta</div>
+            <div class="modal-text">
+                Es la respuesta mínima correcta, porque evita una conducta prohibida: usar recursos públicos / tiempo laboral con fines proselitistas.<br><br>
+                Sin embargo, estas situaciones deben reportarse de inmediato para proteger la transparencia institucional.
+            </div>
+            <button class="modal-btn" onclick="closeModalAndContinue()">Entendido</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedOption = null;
+        const submitBtn = document.getElementById('submit-btn');
+        const modal = document.getElementById('modal-b');
+
+        function selectOption(option) {
+            // Quitar selección anterior
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Seleccionar nueva opción
+            event.currentTarget.classList.add('selected');
+            selectedOption = option;
+            submitBtn.disabled = false;
+        }
+
+        function submitAnswer() {
+            if (!selectedOption) {
+                alert('Por favor selecciona una opción');
+                return;
+            }
+            
+            // Ocultar página actual
+            document.getElementById('scenario-page').classList.remove('active');
+            
+            // Mostrar resultado según opción
+            if (selectedOption === 'a') {
+                document.getElementById('incorrect-page').classList.add('active');
+            } else if (selectedOption === 'b') {
+                // Mostrar modal primero
+                modal.style.display = 'flex';
+            } else if (selectedOption === 'c') {
+                document.getElementById('best-practice-page').classList.add('active');
+            }
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        function closeModalAndContinue() {
+            modal.style.display = 'none';
+            document.getElementById('minimum-correct-page').classList.add('active');
+        }
+
+        function restartScenario() {
+            // Limpiar selección
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            selectedOption = null;
+            submitBtn.disabled = true;
+            
+            // Volver a página principal
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            document.getElementById('scenario-page').classList.add('active');
+        }
+
+        // Cerrar modal al hacer clic fuera del contenido
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
